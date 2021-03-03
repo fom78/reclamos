@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Navbar from "./Navbar";
+
 // import PropTypes from "prop-types";
 import NProgress from "nprogress";
 import nProgress from "nprogress";
-//import classNames from "classnames";
 
 import styled from 'styled-components';
 
@@ -32,12 +32,13 @@ const Layout = ({ children, title, footer = true, dark = false }) => {
     // <div className={classNames({ "bg-dark": dark, "bg-light": !dark })}>
     <div>
       <Navbar />
+      {/* <Navbar2 /> */}
       <Main>
         {/* Title */}
         {title && (
-          <Titulo>
+          <TituloMain>
             {title}
-          </Titulo>
+          </TituloMain>
         )}
 
         {/* Content */}
@@ -45,7 +46,7 @@ const Layout = ({ children, title, footer = true, dark = false }) => {
       </Main>
       {footer && (
         <Footer>
-          <ContenedorFooter className="container p-4">
+          <ContenedorFooter>
             <p>&copy; fom78</p>
             <p>2019 - {new Date().getFullYear()}</p>
             <p>All rights Reserved.</p>
@@ -87,9 +88,11 @@ const Main = styled.main`
   }
 `
 
-const Titulo = styled.h1`
+const TituloMain = styled.h1`
  text-align: center!important;
   color: ${props => props.dark ? '#f8f9fa!important' : 'black!important' };
+  font-size: 1.75rem;
+  font-weight: 500;
 `
 
 //  Footer
@@ -106,6 +109,7 @@ const ContenedorFooter = styled.div`
   align-items: center;
   align-content:center;
   justify-content: center;
+  margin: 0 auto;
   gap:10px;
 
   @media screen and (min-width: 576px)

@@ -1,4 +1,15 @@
-html,
+body {
+  margin: 0;
+  font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: .9375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #373a3c;
+  text-align: left;
+  background-color: #fff;
+}
+
+ html,
 body,
 body > div:first-child,
 div#__next,
@@ -6,6 +17,8 @@ div#__next > div {
   height: 100%;
 }
 
+
+/*
 .overflow {
   height: 50%;
   overflow: hidden;
@@ -18,7 +31,7 @@ div#__next > div {
 
 .overflow .card-img-top:hover {
   transform: scale(1.8);
-}
+} */
 
 #nprogress .bar {
   background: #ff5367 !important;

@@ -1,8 +1,8 @@
 import Head from 'next/head'
-import 'bootswatch/dist/cosmo/bootstrap.min.css'
+//import 'bootswatch/dist/cosmo/bootstrap.min.css'
 //import 'animate.css/animate.min.css'
-import '../styles/globals.css'
-
+//import '../styles/globals.css'
+import '../styles/estilos.css'
 
 
 
@@ -17,7 +17,7 @@ export default function MyApp({ Component, pageProps }) {
   )
 }
 
-// This default export is required in a new `pages/_app.js` file.
+// // This default export is required in a new `pages/_app.js` file.
 // export default function MyApp({ Component, pageProps }) {
 //   return <Component {...pageProps} />
 // }
