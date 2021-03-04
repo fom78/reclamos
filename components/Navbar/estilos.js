@@ -1,15 +1,14 @@
-import Link from "next/link";
 import styled from "styled-components";
 
 
-const Navegacion = styled.nav`
+export const Navegacion = styled.nav`
   background-color: #373a3c !important;
   color: #f8f9fa !important;
   position: relative;
   padding: 0.5rem 1rem;
 `;
 
-const ContenedorNavegacion = styled.div`
+export const ContenedorNavegacion = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -28,7 +27,7 @@ const ContenedorNavegacion = styled.div`
   }
 `;
 
-const NavbarBrand = styled.a`
+export const NavbarBrand = styled.a`
   
   display: inline-block;
   padding-top: 0.324219rem;
@@ -53,7 +52,7 @@ const NavbarBrand = styled.a`
   }
 `;
 
-const MenuIzquierda = styled.ul`
+export const MenuIzquierda = styled.ul`
   margin-left: auto !important;
   display: flex;
   flex-direction: column;
@@ -72,7 +71,7 @@ const MenuIzquierda = styled.ul`
   }
 `;
 
-const NavItem = styled.li`
+export const NavItem = styled.li`
   display: list-item;
   text-align: -webkit-match-parent;
 
@@ -87,35 +86,3 @@ const NavItem = styled.li`
     ${props => props.activo ? 'color: #fff' : 'color: rgba(255, 255, 255, 0.5)'}
   }
 `;
-
-const Navbar = () => {
-  return (
-    <>
-      <Navegacion>
-        <ContenedorNavegacion>
-          <Link href="/">
-            <NavbarBrand activo>Reclamos los Pioneros</NavbarBrand>
-          </Link>
-
-          <MenuIzquierda>
-            <NavItem>
-              <Link href="/firmas">
-                <a aria-current="page">
-                  Firmas
-                </a>
-              </Link>
-            </NavItem>
-            <NavItem>
-              <Link href="/github">
-                <a>Fotos</a>
-              </Link>
-            </NavItem>
-          </MenuIzquierda>
-        </ContenedorNavegacion>
-        {/* </div> */}
-      </Navegacion>
-    </>
-  );
-};
-
-export default Navbar;

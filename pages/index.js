@@ -1,14 +1,75 @@
 // import { GlobalStyle } from "./../styles/globales";
+import { useState, useEffect } from "react"
 import Layout from "../components/Layout";
 import Firmas from "../components/Firmas";
+import Button,  { modoButton } from "../components/Button";
+import { firmas }  from "../datos";
 import styled from "styled-components";
 
+const defaultMessage = "Firmo en total acuerdo con el reclamo!"
 export default function Home() {
+  const [firmando, setFirmando] = useState(false)
+  const [message, setMessage] = useState(defaultMessage)
+  const [ultimasFirmas, setUtlimasFirmas] = useState(firmas)
+  const user = 1
+  const userNoFirmo = 1
+ 
+  const handleClickFirmar = () => {
+    setFirmando(!firmando)
+  }
+
+  const handleClickEnviarFirmar = (e) => {
+    e.preventDefault()
+    //console.log(ultimasFirmas);
+    const currentFirma = {
+      id:ultimasFirmas.length,
+      userId: '124',
+      barrio: false,
+      msg: message
+    }
+    setUtlimasFirmas(ultimasFirmas.concat(currentFirma))
+    console.log(ultimasFirmas);
+    //si lo ingreso....
+    setFirmando(!firmando)
+
+  }
+  const handleClickGmail = () => {
+    // loginWithGmail().catch((err) => {
+    //   console.log(err)
+    // })
+    console.log('inicar con gmail')
+  }
+
+  const handleChange = (event) => {
+    const { value } = event.target
+    setMessage(value)
+  }
+
   return (
     <>
     {/* <GlobalStyle /> */}
-    <Layout title="Reclamamos..." footer={true} dark>
-      
+    <Layout footer={true} dark>
+      <CardFirma>
+        <p>Estoy de Acuerdo y quiero firmar!</p>
+        {(user && userNoFirmo)
+        ? <Button 
+            onClick={handleClickFirmar} 
+            modo={(!firmando)?modoButton.FIRMAR:modoButton.CANCELAR_FIRMAR}>
+              {(!firmando)?'Firmar':'Cancelar'}
+          </Button>
+        : <Button onClick={handleClickGmail}>Ingresar con Gmail</Button>}
+      </CardFirma>
+      <ContenedorFormulario firmando={firmando}>
+      <FormularioFirma>
+          <TextArea 
+            defaultValue={defaultMessage}
+            onChange={handleChange}
+            value={message}
+          >
+          </TextArea>
+          <Button onClick={handleClickEnviarFirmar} modo={modoButton.ENVIAR_FIRMA}>Enviar mi firma</Button>
+      </FormularioFirma>
+      </ContenedorFormulario>
       <CardReclamo>
         <Articulo>
         <Titulo>Titulo del reclamo</Titulo>
@@ -36,6 +97,7 @@ export default function Home() {
   );
 }
 
+// Reclamo
 const CardReclamo = styled.div`
     position: relative;
     display: -webkit-box;
@@ -70,7 +132,46 @@ const Texto = styled.p`
   color:#151715;
 `
 
+// Conteo
 const Conteo = styled.div`
   padding: .6rem;
   display:flex;
+`
+
+// Firmar
+const CardFirma = styled.div`
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height: 3rem;
+  padding: .4rem;
+
+  p {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #C70039;
+  }
+`
+const ContenedorFormulario =  styled.div`
+  display:${props => props.firmando ? 'flex' : 'none'};
+  /* border: 2px solid #838C78; */
+  border-radius: .5rem;
+  margin: .5rem auto;
+  width:100%;
+  min-height:8rem;
+
+`
+const FormularioFirma = styled.form`
+  width:100%;
+`
+
+const TextArea = styled.textarea`
+    border: 3px solid #838C78;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    min-height: 200px;
+    padding: 15px;
+    outline: 0;
+    resize: none;
+    width: 100%;
 `
