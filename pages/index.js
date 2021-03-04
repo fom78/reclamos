@@ -6,21 +6,31 @@ import Button,  { modoButton } from "../components/Button";
 import { firmas }  from "../datos";
 import styled from "styled-components";
 
+import { loginWithGmail, logout } from "../firebase/client"
+import useUser, { USER_STATES } from "../hooks/useUser"
+
 const defaultMessage = "Firmo en total acuerdo con el reclamo!"
+
 export default function Home() {
   const [firmando, setFirmando] = useState(false)
   const [message, setMessage] = useState(defaultMessage)
   const [ultimasFirmas, setUtlimasFirmas] = useState(firmas)
-  const user = 1
+  
+  const user = useUser()
+  //const user = 0
   const userNoFirmo = 1
  
+  // useEffect(() => {
+  //   //user && router.replace("/home")
+  //   console.log('user',user);
+  // }, [user])
+
   const handleClickFirmar = () => {
     setFirmando(!firmando)
   }
 
   const handleClickEnviarFirmar = (e) => {
     e.preventDefault()
-    //console.log(ultimasFirmas);
     const currentFirma = {
       id:ultimasFirmas.length,
       userId: '124',
@@ -28,16 +38,17 @@ export default function Home() {
       msg: message
     }
     setUtlimasFirmas(ultimasFirmas.concat(currentFirma))
-    console.log(ultimasFirmas);
-    //si lo ingreso....
     setFirmando(!firmando)
 
   }
   const handleClickGmail = () => {
-    // loginWithGmail().catch((err) => {
-    //   console.log(err)
-    // })
-    console.log('inicar con gmail')
+    loginWithGmail().catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const handleClickSalir = () => {
+    logout()
   }
 
   const handleChange = (event) => {
@@ -55,18 +66,20 @@ export default function Home() {
         ? <Button 
             onClick={handleClickFirmar} 
             modo={(!firmando)?modoButton.FIRMAR:modoButton.CANCELAR_FIRMAR}>
-              {(!firmando)?'Firmar':'Cancelar'}
+              {(!firmando)?'Firmar':`Cancelar`}
           </Button>
         : <Button onClick={handleClickGmail}>Ingresar con Gmail</Button>}
+        
+        {(user)
+        ? <button onClick={handleClickSalir}>salir{user.uid} {user.username}</button>
+       : null}
       </CardFirma>
       <ContenedorFormulario firmando={firmando}>
       <FormularioFirma>
           <TextArea 
-            defaultValue={defaultMessage}
             onChange={handleChange}
             value={message}
-          >
-          </TextArea>
+          />
           <Button onClick={handleClickEnviarFirmar} modo={modoButton.ENVIAR_FIRMA}>Enviar mi firma</Button>
       </FormularioFirma>
       </ContenedorFormulario>
