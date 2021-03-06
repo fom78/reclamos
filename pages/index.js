@@ -1,12 +1,12 @@
 // import { GlobalStyle } from "./../styles/globales";
-import { useState, useEffect } from "react"
+import { useState,useEffect } from "react"
 import Layout from "../components/Layout";
 import Firmas from "../components/Firmas";
 import Button,  { modoButton } from "../components/Button";
 import { firmas }  from "../datos";
 import styled from "styled-components";
 
-import { loginWithGmail, logout } from "../firebase/client"
+import { loginWithGmail } from "../firebase/client"
 import useUser, { USER_STATES } from "../hooks/useUser"
 
 const defaultMessage = "Firmo en total acuerdo con el reclamo!"
@@ -17,7 +17,6 @@ export default function Home() {
   const [ultimasFirmas, setUtlimasFirmas] = useState(firmas)
   
   const user = useUser()
-  //const user = 0
   const userNoFirmo = 1
  
   // useEffect(() => {
@@ -41,15 +40,11 @@ export default function Home() {
     setFirmando(!firmando)
 
   }
+ 
   const handleClickGmail = () => {
-    loginWithGmail().catch((err) => {
-      console.log(err)
-    })
-  }
-
-  const handleClickSalir = () => {
-    logout()
-  }
+      loginWithGmail().catch((err) => {
+        console.log(err)
+      })}
 
   const handleChange = (event) => {
     const { value } = event.target
@@ -70,9 +65,7 @@ export default function Home() {
           </Button>
         : <Button onClick={handleClickGmail}>Ingresar con Gmail</Button>}
         
-        {(user)
-        ? <button onClick={handleClickSalir}>salir{user.uid} {user.username}</button>
-       : null}
+       
       </CardFirma>
       <ContenedorFormulario firmando={firmando}>
       <FormularioFirma>
@@ -88,7 +81,6 @@ export default function Home() {
         <Titulo>Titulo del reclamo</Titulo>
         <Texto>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod quis aut voluptates illo magnam doloremque ut quae numquam eum voluptatum est iste, totam corrupti illum laborum eveniet! Perspiciatis, velit ipsa!
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum maxime labore culpa repudiandae nam magnam fugit velit sint qui eos, exercitationem nesciunt, perspiciatis necessitatibus alias et iure. Quasi, adipisci rerum.
-          console.log();
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque rem deserunt perspiciatis ex natus cum aliquam tempore, nobis accusantium quibusdam? Necessitatibus quibusdam ipsa quas voluptatum, reprehenderit cum architecto numquam accusamus!
           inventore, minus harum accusantium numquam iste reprehenderit sequi repellat aspernatur et vitae ab nemo tempore ea, beatae impedit suscipit omnis. Quas veritatis delectus nostrum dolorem possimus, sed porro ullam.
           Distinctio, eligendi, sed in autem repellat numquam commodi quam ex quaerat quisquam eaque labore sequi dolore natus suscipit earum beatae ratione mollitia voluptas nulla architecto! Nihil assumenda similique ipsam delectus.
@@ -172,7 +164,8 @@ const ContenedorFormulario =  styled.div`
   margin: .5rem auto;
   width:100%;
   min-height:8rem;
-
+  /* opacity: 0;
+  transition: 2.5s all ease-in; */
 `
 const FormularioFirma = styled.form`
   width:100%;

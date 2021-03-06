@@ -86,3 +86,22 @@ export const NavItem = styled.li`
     ${props => props.activo ? 'color: #fff' : 'color: rgba(255, 255, 255, 0.5)'}
   }
 `;
+
+export const BtnSalir = styled.button`
+  border-style:none;
+  border-radius:2.5rem;
+  padding: .5rem .3rem;
+  background-color:transparent;
+  font-size: .771875rem;
+  font-weight:700;
+  cursor:pointer;
+  color: #fff;
+
+  &:hover {
+    text-decoration: none;
+    //font-size: 1rem;
+    color:#0A0EF5;
+    cursor:pointer;
+    transition: 0.5s all ease-in-out;
+  }
+`

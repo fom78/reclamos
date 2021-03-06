@@ -1,7 +1,15 @@
 import Link from "next/link";
-import { Navegacion, ContenedorNavegacion, NavbarBrand, MenuIzquierda, NavItem } from "./estilos";
-
+import { useEffect } from "react";
+import { Navegacion, ContenedorNavegacion, NavbarBrand, MenuIzquierda, NavItem, BtnSalir } from "./estilos";
+import useUser, { USER_STATES } from "../../hooks/useUser"
+import { logout } from "../../firebase/client";
 const Navbar = () => {
+  const user = useUser()
+
+  const handleClickSalir = () => {
+    logout()
+  }
+
   return (
     <>
       <Navegacion>
@@ -23,6 +31,9 @@ const Navbar = () => {
                 <a>Fotos</a>
               </Link>
             </NavItem>
+            {(user)
+            ? <BtnSalir onClick={handleClickSalir}> Salir</BtnSalir>
+            : null}
           </MenuIzquierda>
         </ContenedorNavegacion>
         {/* </div> */}
