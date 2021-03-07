@@ -4,7 +4,7 @@ import { Navegacion, ContenedorNavegacion, NavbarBrand, MenuIzquierda, NavItem, 
 import useUser, { USER_STATES } from "../../hooks/useUser"
 import { logout } from "../../firebase/client";
 const Navbar = () => {
-  const user = useUser()
+  const {user} = useUser()
 
   const handleClickSalir = () => {
     logout()

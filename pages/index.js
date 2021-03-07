@@ -6,8 +6,8 @@ import Button,  { modoButton } from "../components/Button";
 import { firmas }  from "../datos";
 import styled from "styled-components";
 
-import { loginWithGmail } from "../firebase/client"
-import useUser, { USER_STATES } from "../hooks/useUser"
+import { loginWithGmail, getFirmaByUserId, addFirma } from "../firebase/client"
+import useUser from "../hooks/useUser"
 
 const defaultMessage = "Firmo en total acuerdo con el reclamo!"
 
@@ -16,9 +16,8 @@ export default function Home() {
   const [message, setMessage] = useState(defaultMessage)
   const [ultimasFirmas, setUtlimasFirmas] = useState(firmas)
   
-  const user = useUser()
-  const userNoFirmo = 1
- 
+  const {user,setUser, userHaFirmado, setUserHaFirmado} = useUser()
+  
   // useEffect(() => {
   //   //user && router.replace("/home")
   //   console.log('user',user);
@@ -28,21 +27,43 @@ export default function Home() {
     setFirmando(!firmando)
   }
 
-  const handleClickEnviarFirmar = (e) => {
+  const handleClickEnviarFirma = (e) => {
     e.preventDefault()
     const currentFirma = {
-      id:ultimasFirmas.length,
-      userId: '124',
-      barrio: false,
+      //barrio: false,
+      userId: user.uid,
       msg: message
     }
+    // Va a firmar si aun no lo hizo
+
+    getFirmaByUserId(user.uid)
+      .then((res)=>{
+        if (!res) {
+          // Usuario no firmo, cargar la firma
+          addFirma(currentFirma)
+            .then((res)=>{
+              console.log(res);
+              if (res) {
+                setUserHaFirmado(true)                
+                return true
+              }
+            })
+        }
+      })
+
+    // obtenemos el usuario nuevamnete 
+
+    const newUser = {...user, firma:currentFirma}
+    setUser(newUser)
+    
     setUtlimasFirmas(ultimasFirmas.concat(currentFirma))
     setFirmando(!firmando)
 
   }
  
   const handleClickGmail = () => {
-      loginWithGmail().catch((err) => {
+      loginWithGmail()
+        .catch((err) => {
         console.log(err)
       })}
 
@@ -57,25 +78,27 @@ export default function Home() {
     <Layout footer={true} dark>
       <CardFirma>
         <p>Estoy de Acuerdo y quiero firmar!</p>
-        {(user && userNoFirmo)
-        ? <Button 
+        {(user)
+        ? ((!userHaFirmado)
+         ?<Button 
             onClick={handleClickFirmar} 
             modo={(!firmando)?modoButton.FIRMAR:modoButton.CANCELAR_FIRMAR}>
               {(!firmando)?'Firmar':`Cancelar`}
           </Button>
+          : null)
         : <Button onClick={handleClickGmail}>Ingresar con Gmail</Button>}
-        
-       
       </CardFirma>
-      <ContenedorFormulario firmando={firmando}>
-      <FormularioFirma>
+      {(!userHaFirmado)
+      ? <ContenedorFormulario firmando={firmando}>
+        <FormularioFirma>
           <TextArea 
             onChange={handleChange}
             value={message}
           />
-          <Button onClick={handleClickEnviarFirmar} modo={modoButton.ENVIAR_FIRMA}>Enviar mi firma</Button>
-      </FormularioFirma>
-      </ContenedorFormulario>
+          <Button onClick={handleClickEnviarFirma} modo={modoButton.ENVIAR_FIRMA}>Enviar mi firma</Button>
+       </FormularioFirma>
+       </ContenedorFormulario>
+      : null }
       <CardReclamo>
         <Articulo>
         <Titulo>Titulo del reclamo</Titulo>

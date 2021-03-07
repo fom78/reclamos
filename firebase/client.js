@@ -34,7 +34,6 @@ export const onAuthStateChanged = (onChange) => {
       .then((res)=>
         {
           if (res) {
-            console.log('Usuario agregado');
             // Enviar un email ?!
           }
       })
@@ -51,6 +50,7 @@ export const addUser = async ({ uid, userName }) => {
     const newUsers = {
       uid,
       userName,
+      firma:null,
       createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
     }
     await newUserRef.doc(uid).set(newUsers);
@@ -72,4 +72,44 @@ export const logout = () => {
   }).catch((error) => {
     // An error happened.
   });
+}
+
+export const editUser = async ( uid, firma ) => {
+  const userRef = db.collection('users').doc(uid);
+  return  await userRef.update({firma})
+  
+}
+
+export const getUser = async (uid) => {
+  const userRef = db.collection('users').doc(uid);
+  const doc = await userRef.get();
+  if (doc.exists) {
+    return doc.data()
+  }
+  return false
+}
+
+export const getFirmaByUserId = async(userId) => {
+  const firmasRef = db.collection('firmas')
+  const snapshot = await firmasRef.where('userId', '==', userId).get();
+  if (snapshot.empty) {
+    return false;
+  }
+  let res = false
+  snapshot.forEach(doc => {
+    return res = doc.data()
+  });
+  return res
+}
+
+export const addFirma = async ({ userId, msg }) => {
+  const firmasRef = db.collection('firmas')
+  const firma = {
+    userId,
+    msg,
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+  }
+  await firmasRef.doc().set(firma);
+  return true
+ 
 }
