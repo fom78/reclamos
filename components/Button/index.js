@@ -5,7 +5,8 @@ export const modoButton = {
   FIRMAR: 1,
   FIRMANDO: 2,
   ENVIAR_FIRMA:3,
-  CANCELAR_FIRMAR: 4
+  CANCELAR_FIRMAR: 4,
+  VER_FIRMA:5
 }
 export default function Button({ children, disabled, onClick, firmar = false, enviarFirma = false, modo = modoButton.DEFAULT }) {
   return (

@@ -8,8 +8,10 @@ const handleModoType = modo => {
       return "#B4E97A";
     case modoButton.ENVIAR_FIRMA:
       return "#03a9f3";
-      case modoButton.CANCELAR_FIRMAR:
-        return "#DA1A03";
+    case modoButton.CANCELAR_FIRMAR:
+      return "#DA1A03";
+    case modoButton.VER_FIRMA:
+      return "#03a9f3";
     default:
       return "#000000";
   }

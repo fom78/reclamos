@@ -3,11 +3,13 @@ import { useEffect } from "react";
 import { Navegacion, ContenedorNavegacion, NavbarBrand, MenuIzquierda, NavItem, BtnSalir } from "./estilos";
 import useUser, { USER_STATES } from "../../hooks/useUser"
 import { logout } from "../../firebase/client";
+
 const Navbar = () => {
   const {user} = useUser()
 
   const handleClickSalir = () => {
     logout()
+    
   }
 
   return (

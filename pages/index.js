@@ -1,4 +1,4 @@
-// import { GlobalStyle } from "./../styles/globales";
+
 import { useState,useEffect } from "react"
 import Layout from "../components/Layout";
 import Firmas from "../components/Firmas";
@@ -6,17 +6,18 @@ import Button,  { modoButton } from "../components/Button";
 import { firmas }  from "../datos";
 import styled from "styled-components";
 
-import { loginWithGmail, getFirmaByUserId, addFirma } from "../firebase/client"
+import { loginWithGmail, addFirma } from "../firebase/client"
 import useUser from "../hooks/useUser"
 
 const defaultMessage = "Firmo en total acuerdo con el reclamo!"
 
 export default function Home() {
-  const [firmando, setFirmando] = useState(false)
+//   const [firmando, setFirmando] = useState(false)
+  const [verFirma, setVerFirma] = useState(false)
   const [message, setMessage] = useState(defaultMessage)
   const [ultimasFirmas, setUtlimasFirmas] = useState(firmas)
   
-  const {user,setUser, userHaFirmado, setUserHaFirmado} = useUser()
+  const {user,setUser, userHaFirmado, userFirma,firmando, setFirmando} = useUser()
   
   // useEffect(() => {
   //   //user && router.replace("/home")
@@ -26,39 +27,33 @@ export default function Home() {
   const handleClickFirmar = () => {
     setFirmando(!firmando)
   }
+  const handleClickVerMiFirma = () => {
+    setVerFirma(!verFirma)
+  }
 
   const handleClickEnviarFirma = (e) => {
     e.preventDefault()
-    const currentFirma = {
-      //barrio: false,
-      userId: user.uid,
-      msg: message
-    }
-    // Va a firmar si aun no lo hizo
-
-    getFirmaByUserId(user.uid)
-      .then((res)=>{
-        if (!res) {
-          // Usuario no firmo, cargar la firma
-          addFirma(currentFirma)
-            .then((res)=>{
-              console.log(res);
-              if (res) {
-                setUserHaFirmado(true)                
-                return true
-              }
-            })
-        }
-      })
-
-    // obtenemos el usuario nuevamnete 
-
-    const newUser = {...user, firma:currentFirma}
-    setUser(newUser)
     
-    setUtlimasFirmas(ultimasFirmas.concat(currentFirma))
-    setFirmando(!firmando)
-
+    // Controlamos si el usuario hafirmado ??
+    
+    if(!userHaFirmado)
+    {
+        const currentFirma = {
+            //barrio: false,
+            userId: user.uid,
+            msg: message
+          }
+          // Firmamos siempre para prueba
+          addFirma(currentFirma)
+              .then((res) => {console.log('firmando ',res)})
+        
+        const newUser = {...user, firma:currentFirma}
+        setUser(newUser)
+        
+        setUtlimasFirmas(ultimasFirmas.concat(currentFirma))
+        setFirmando(!firmando)
+          
+    } else {console.log('ya firmaste papa!!!!');}
   }
  
   const handleClickGmail = () => {
@@ -74,19 +69,29 @@ export default function Home() {
 
   return (
     <>
-    {/* <GlobalStyle /> */}
     <Layout footer={true} dark>
       <CardFirma>
-        <p>Estoy de Acuerdo y quiero firmar!</p>
+      
         {(user)
-        ? ((!userHaFirmado)
-         ?<Button 
-            onClick={handleClickFirmar} 
-            modo={(!firmando)?modoButton.FIRMAR:modoButton.CANCELAR_FIRMAR}>
-              {(!firmando)?'Firmar':`Cancelar`}
-          </Button>
-          : null)
-        : <Button onClick={handleClickGmail}>Ingresar con Gmail</Button>}
+            ? ((!userHaFirmado)
+                ?(
+                    <>
+                    <p>Estoy de Acuerdo y quiero firmar!</p>
+                    <Button 
+                        onClick={handleClickFirmar} 
+                        modo={(!firmando)?modoButton.FIRMAR:modoButton.CANCELAR_FIRMAR}>
+                        {(!firmando)?'Firmar':`Cancelar`}
+                    </Button>
+                    </>)
+                : (<>
+                    <p>Ya Firme!!</p>
+                    <Button 
+                    onClick={handleClickVerMiFirma} 
+                    modo={modoButton.VER_FIRMA}>{!verFirma?'Ver':'Ocultar'} Mi Firma
+                    </Button>
+                    </>))
+            : <><p>Estoy de Acuerdo y quiero firmar!</p><Button onClick={handleClickGmail}>Ingresar con Gmail</Button></>
+        }
       </CardFirma>
       {(!userHaFirmado)
       ? <ContenedorFormulario firmando={firmando}>
@@ -99,6 +104,11 @@ export default function Home() {
        </FormularioFirma>
        </ContenedorFormulario>
       : null }
+      {(verFirma && userFirma)
+      ? <ContenedorVerFirma>
+          <MiFirma>{userFirma.msg}</MiFirma>
+      </ContenedorVerFirma>
+      : null}
       <CardReclamo>
         <Articulo>
         <Titulo>Titulo del reclamo</Titulo>
@@ -202,5 +212,27 @@ const TextArea = styled.textarea`
     padding: 15px;
     outline: 0;
     resize: none;
+    width: 100%;
+`
+
+//Ver Firma
+const ContenedorVerFirma =  styled.div`
+  /* display:${props => props.verFirma ? 'flex' : 'none'}; */
+  display:flex;
+  /* border: 2px solid #838C78; */
+  border-radius: .5rem;
+  margin: .5rem auto;
+  width:100%;
+  min-height:2rem;
+`
+const MiFirma = styled.span`
+    border: 3px solid #838C78;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    height:auto;
+    background-color:#90EB90;
+    padding: 15px;
+    outline: 0;
+    //resize: none;
     width: 100%;
 `

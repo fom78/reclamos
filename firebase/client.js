@@ -71,6 +71,7 @@ export const logout = () => {
     return true
   }).catch((error) => {
     // An error happened.
+    console.log('logout: ',error);
   });
 }
 
@@ -103,13 +104,27 @@ export const getFirmaByUserId = async(userId) => {
 }
 
 export const addFirma = async ({ userId, msg }) => {
-  const firmasRef = db.collection('firmas')
   const firma = {
-    userId,
-    msg,
-    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+        userId,
+        msg,
+        createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+      }
+  const res = await db.collection("firmas").add(firma)
+  if(res.id) {
+    const doc = await db.collection("firmas").doc(res.id).get()
+    return doc.data()
   }
-  await firmasRef.doc().set(firma);
-  return true
- 
+  return false
+
+}
+
+export const getFirmas = async () => {
+  const firmas = await db.collection("firmas").get()
+  if (firmas.empty) {
+    console.log('No hay firmas');
+    return false
+  } else {
+    console.log('hay firmas');
+  }
+  return firmas
 }

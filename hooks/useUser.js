@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { onAuthStateChanged, getUser, getFirmaByUserId } from "../firebase/client"
+import { onAuthStateChanged, getFirmaByUserId } from "../firebase/client"
 import { useRouter } from "next/router"
 
 export const USER_STATES = {
@@ -10,6 +10,9 @@ export const USER_STATES = {
 export default function useUser() {
   const [user, setUser] = useState(USER_STATES.NOT_KNOWN)
   const [userHaFirmado, setUserHaFirmado] = useState(false)
+  const [firmando, setFirmando] = useState(false)
+  const[userFirma, setUserFirma] = useState(null)
+
   const router = useRouter()
 
   useEffect(() => {
@@ -18,15 +21,16 @@ export default function useUser() {
 
   useEffect(() => {
     user === USER_STATES.NOT_LOGGED && router.push("/")
+    if (user === USER_STATES.NOT_LOGGED) {
+      setUserFirma(null)
+      setFirmando(false)
+    } 
     if (user){
-      // // obtener el user desde la bd, controlar si res es false o user !!!
-      // getUser(user.uid)
-      //   .then((res)=>{ setUser(res);})
-
-        getFirmaByUserId(user.uid)
+       getFirmaByUserId(user.uid)
         .then((res)=>{ 
           if (res) {
             setUserHaFirmado(true);
+            setUserFirma(res)
           } else {
             setUserHaFirmado(false);
           }
@@ -34,5 +38,5 @@ export default function useUser() {
     }
   }, [user])
 
-  return {user, setUser, userHaFirmado, setUserHaFirmado}
+  return {user, setUser, userHaFirmado, setUserHaFirmado, firmando, setFirmando,userFirma}
 }
