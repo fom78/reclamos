@@ -4,18 +4,29 @@ import Head from 'next/head'
 //import '../styles/globals.css'
 import '../styles/estilos.css'
 
+//Opcion Auth0
+import { UserProvider } from '@auth0/nextjs-auth0';
 
-
-export default function MyApp({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   return (
-    <>
-      <Head>
-        <title>Los Pioneros reclama!</title>
-      </Head>
+    <UserProvider>
       <Component {...pageProps} />
-    </>
-  )
+    </UserProvider>
+  );
 }
+
+
+// Opcion inicial
+// export default function MyApp({ Component, pageProps }) {
+//   return (
+//     <>
+//       <Head>
+//         <title>Los Pioneros reclama!</title>
+//       </Head>
+//       <Component {...pageProps} />
+//     </>
+//   )
+// }
 
 // // This default export is required in a new `pages/_app.js` file.
 // export default function MyApp({ Component, pageProps }) {
