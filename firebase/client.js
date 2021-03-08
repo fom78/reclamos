@@ -103,10 +103,11 @@ export const getFirmaByUserId = async(userId) => {
   return res
 }
 
-export const addFirma = async ({ userId, msg }) => {
+export const addFirma = async ({ userId, msg, esHabitanteDelBarrio }) => {
   const firma = {
         userId,
         msg,
+        esHabitanteDelBarrio,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
       }
   const res = await db.collection("firmas").add(firma)

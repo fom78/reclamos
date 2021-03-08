@@ -3,10 +3,10 @@ import { useState,useEffect } from "react"
 import Layout from "../components/Layout";
 import Firmas from "../components/Firmas";
 import Button,  { modoButton } from "../components/Button";
-import { firmas }  from "../datos";
 import styled from "styled-components";
 
-import { loginWithGmail, addFirma } from "../firebase/client"
+import { loginWithGmail, addFirma, getFirmas } from "../firebase/client"
+
 import useUser from "../hooks/useUser"
 
 const defaultMessage = "Firmo en total acuerdo con el reclamo!"
@@ -15,9 +15,21 @@ export default function Home() {
 //   const [firmando, setFirmando] = useState(false)
   const [verFirma, setVerFirma] = useState(false)
   const [message, setMessage] = useState(defaultMessage)
-  const [ultimasFirmas, setUtlimasFirmas] = useState(firmas)
-  
+  //const [ultimasFirmas, setUtlimasFirmas] = useState(firmas)
+  const [firmas, setFirmas] = useState([]);
+
   const {user,setUser, userHaFirmado, userFirma,firmando, setFirmando} = useUser()
+    
+    useEffect(()=>{
+        getFirmas()
+            .then((res)=>{
+                const docs = [];
+                res.forEach(doc => {
+                docs.push({ ...doc.data(), id: doc.id })
+                });
+                setFirmas(docs);
+            })
+    },[])
   
   // useEffect(() => {
   //   //user && router.replace("/home")
@@ -35,12 +47,15 @@ export default function Home() {
     e.preventDefault()
     
     // Controlamos si el usuario hafirmado ??
-    
+    const esHabitanteDelBarrio = false
+    const provisorioUid = new Date().getTime()
     if(!userHaFirmado)
     {
         const currentFirma = {
             //barrio: false,
-            userId: user.uid,
+            //userId: user.uid,
+            userId: provisorioUid,
+            esHabitanteDelBarrio,
             msg: message
           }
           // Firmamos siempre para prueba
@@ -50,8 +65,9 @@ export default function Home() {
         const newUser = {...user, firma:currentFirma}
         setUser(newUser)
         
-        setUtlimasFirmas(ultimasFirmas.concat(currentFirma))
+        //setUtlimasFirmas(ultimasFirmas.concat(currentFirma))
         setFirmando(!firmando)
+        setFirmas([...firmas,currentFirma])
           
     } else {console.log('ya firmaste papa!!!!');}
   }
@@ -124,7 +140,7 @@ export default function Home() {
         </Texto>
         </Articulo>
         <Conteo>
-          <Firmas /><Firmas barrio={false}/>
+          <Firmas firmas={firmas}/><Firmas firmas={firmas} barrio={false}/>
         </Conteo>
       </CardReclamo>
       
