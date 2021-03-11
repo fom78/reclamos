@@ -19,15 +19,17 @@ export default function Home () {
   const { user, setUser, userHaFirmado, userFirma, firmando, setFirmando } = useUser()
 
   useEffect(() => {
-    getFirmas()
-      .then((res) => {
-        const docs = []
-        res.forEach(doc => {
-          docs.push({ ...doc.data(), id: doc.id })
-        })
-        setFirmas(docs)
-      })
-  }, [])
+    // getFirmas()
+    //   .then((res) => {
+    //     const docs = []
+    //     res.forEach(doc => {
+    //       docs.push({ ...doc.data(), id: doc.id })
+    //     })
+    //     setFirmas(docs)
+    //   })
+    // getFirmas().then((docs) => { setFirmas(docs) })
+    getFirmas().then(setFirmas)
+  }, [user])
 
   const handleClickFirmar = () => {
     setFirmando(!firmando)
@@ -135,9 +137,13 @@ export default function Home () {
             </Texto>
           </Articulo>
           <Conteo>
-            <Firmas firmas={firmas} /><Firmas firmas={firmas} barrio={false} />
+            <Firmas firmas={firmas} />
+            {/* <Firmas firmas={firmas} barrio={false} /> */}
           </Conteo>
         </CardReclamo>
+        {/* <CardFirmas>
+          firmas
+        </CardFirmas> */}
 
       </Layout>
     </>
@@ -183,7 +189,10 @@ const Texto = styled.p`
 // Conteo
 const Conteo = styled.div`
   padding: .6rem;
-  display:flex;
+  display:grid;
+  //flex-wrap: wrap;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
 `
 
 // Firmar
@@ -246,3 +255,7 @@ const MiFirma = styled.span`
     //resize: none;
     width: 100%;
 `
+// // Card Firmas
+// const CardFirmas = styled.div`
+//   background-color: blue;
+// `

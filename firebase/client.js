@@ -115,10 +115,34 @@ export const addFirma = async ({ userId, msg, esHabitanteDelBarrio }) => {
   return false
 }
 
-export const getFirmas = async () => {
-  const firmas = await db.collection('firmas').get()
-  if (firmas.empty) {
-    return false
-  }
-  return firmas
+// export const getFirmas = async () => {
+//   const firmas = await db.collection('firmas').get()
+//   if (firmas.empty) {
+//     return false
+//   }
+//   return firmas
+// }
+
+export const getFirmas = () => {
+  return db
+    .collection('firmas')
+    .get()
+    .then(({ docs }) => {
+      return docs.map((doc) => {
+        const data = doc.data()
+        const id = doc.id
+        const { createdAt } = data
+        console.log(createdAt)
+
+        const fecha = new Date(createdAt.seconds * 1000)
+        const options = { year: 'numeric', month: 'short', day: 'numeric' }
+        const normalizedCreatedAt = new Intl.DateTimeFormat('es-ES', options).format(fecha)
+
+        return {
+          ...data,
+          id,
+          createdAt: normalizedCreatedAt
+        }
+      })
+    })
 }
