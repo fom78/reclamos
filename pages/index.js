@@ -48,6 +48,8 @@ export default function Home () {
       const currentFirma = {
         userId: user.uid,
         // userId: provisorioUid,
+        userName: user.name,
+        userAvatar: user.avatar,
         esHabitanteDelBarrio,
         msg: message
       }

@@ -27,10 +27,33 @@ export const SimpleCheck = styled(FaCheck)`
 export const ContenedorFirmas = styled.div`
     //display:flex;
     grid-column: span 2;
-    //width:80%;
+    min-width:80%;
+    //border:2px solid red;
     margin: 0 auto;
     align-items:center;
-    background-color: #9133DA;
+    //background-color: #9133DA;
     border-radius: .4rem;
     padding: .5rem .3rem;
+`
+
+export const Firma = styled.div`
+    //border:1px solid #000;
+    background-color:#BECABE;
+    min-height: 5rem;
+    margin-bottom: .8rem;
+
+`
+export const FirmaHeader = styled.div`
+    display:flex;
+    justify-content:space-between;
+    padding: .4rem;
+    font-weight:700;
+    //border:2px solid white;
+`
+
+export const FirmaContent = styled.div`
+    display:flex;
+    justify-content:space-between;
+    padding: .4rem;
+    //border:2px solid white;
 `

@@ -15,11 +15,13 @@ const firebaseConfig = {
 const db = firebase.firestore()
 
 const mapUserFromFirebaseAuthToUser = (user) => {
-  const { email, photoURL, uid } = user
+  const { email, photoURL, uid, displayName } = user
+  const name = (displayName) || ''
   return {
     avatar: photoURL,
     userName: email,
     email,
+    name,
     uid
   }
 }
@@ -29,7 +31,7 @@ export const onAuthStateChanged = (onChange) => {
     const normalizedUser = user ? mapUserFromFirebaseAuthToUser(user) : null
     onChange(normalizedUser)
     if (normalizedUser) {
-      addUser({ uid: normalizedUser.uid, userName: normalizedUser.userName })
+      addUser({ uid: normalizedUser.uid, userName: normalizedUser.userName, name: normalizedUser.name, avatar: normalizedUser.avatar })
         .then((res) => {
           if (res) {
             // Enviar un email ?!
@@ -39,7 +41,7 @@ export const onAuthStateChanged = (onChange) => {
   })
 }
 
-export const addUser = async ({ uid, userName }) => {
+export const addUser = async ({ uid, userName, name, avatar }) => {
   const userRef = db.collection('users').doc(uid)
   const doc = await userRef.get()
   if (!doc.exists) {
@@ -47,10 +49,13 @@ export const addUser = async ({ uid, userName }) => {
     const newUsers = {
       uid,
       userName,
+      avatar,
+      name,
       firma: null,
       createdAt: firebase.firestore.Timestamp.fromDate(new Date())
     }
     await newUserRef.doc(uid).set(newUsers)
+    console.log('usuario agregado: ', newUsers)
     return true
   } else {
     return false
@@ -72,20 +77,6 @@ export const logout = () => {
   })
 }
 
-export const editUser = async (uid, firma) => {
-  const userRef = db.collection('users').doc(uid)
-  return await userRef.update({ firma })
-}
-
-export const getUser = async (uid) => {
-  const userRef = db.collection('users').doc(uid)
-  const doc = await userRef.get()
-  if (doc.exists) {
-    return doc.data()
-  }
-  return false
-}
-
 export const getFirmaByUserId = async (userId) => {
   const firmasRef = db.collection('firmas')
   const snapshot = await firmasRef.where('userId', '==', userId).get()
@@ -100,9 +91,11 @@ export const getFirmaByUserId = async (userId) => {
   return res
 }
 
-export const addFirma = async ({ userId, msg, esHabitanteDelBarrio }) => {
+export const addFirma = async ({ userId, msg, esHabitanteDelBarrio, userName, userAvatar }) => {
   const firma = {
     userId,
+    userName,
+    userAvatar,
     msg,
     esHabitanteDelBarrio,
     createdAt: firebase.firestore.Timestamp.fromDate(new Date())
@@ -115,14 +108,6 @@ export const addFirma = async ({ userId, msg, esHabitanteDelBarrio }) => {
   return false
 }
 
-// export const getFirmas = async () => {
-//   const firmas = await db.collection('firmas').get()
-//   if (firmas.empty) {
-//     return false
-//   }
-//   return firmas
-// }
-
 export const getFirmas = () => {
   return db
     .collection('firmas')
@@ -132,8 +117,8 @@ export const getFirmas = () => {
         const data = doc.data()
         const id = doc.id
         const { createdAt } = data
-        console.log(createdAt)
 
+        // Normalizamos fecha
         const fecha = new Date(createdAt.seconds * 1000)
         const options = { year: 'numeric', month: 'short', day: 'numeric' }
         const normalizedCreatedAt = new Intl.DateTimeFormat('es-ES', options).format(fecha)

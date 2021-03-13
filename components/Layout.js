@@ -1,31 +1,31 @@
-import { useEffect } from "react";
-import { useRouter } from "next/router";
-import Navbar from "./Navbar/Navbar";
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import Navbar from './Navbar/Navbar'
 
 // import PropTypes from "prop-types";
-import NProgress from "nprogress";
-import nProgress from "nprogress";
+import NProgress from 'nprogress'
+import nProgress from 'nprogress'
 
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 const Layout = ({ children, title, footer = true, dark = false }) => {
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
     const handleRouteChange = (url) => {
-      NProgress.start();
-    };
+      NProgress.start()
+    }
 
-    router.events.on("routeChangeStart", handleRouteChange);
+    router.events.on('routeChangeStart', handleRouteChange)
 
-    router.events.on("routeChangeComplete", () => NProgress.done());
+    router.events.on('routeChangeComplete', () => NProgress.done())
 
-    router.events.on("routeChangeError", () => nProgress.done());
+    router.events.on('routeChangeError', () => nProgress.done())
 
     return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
-    };
-  }, []);
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [])
 
   return (
     // <div className={classNames({ "bg-dark": dark, "bg-light": !dark })}>
@@ -53,8 +53,8 @@ const Layout = ({ children, title, footer = true, dark = false }) => {
         </Footer>
       )}
     </div>
-  );
-};
+  )
+}
 
 // Layout.proptypes = {
 //   children: PropTypes.node,
@@ -89,7 +89,7 @@ const Main = styled.main`
 
 const TituloMain = styled.h1`
  text-align: center!important;
-  color: ${props => props.dark ? '#f8f9fa!important' : 'black!important' };
+  color: ${props => props.dark ? '#f8f9fa!important' : 'black!important'};
   font-size: 1.75rem;
   font-weight: 500;
 `
@@ -100,7 +100,7 @@ const Footer = styled.footer`
   text-align: center!important;
   color: #f8f9fa!important;
 
-`;
+`
 
 const ContenedorFooter = styled.div`
   padding: 0.5rem!important;
@@ -125,4 +125,4 @@ const ContenedorFooter = styled.div`
   }
 `
 
-export default Layout;
+export default Layout

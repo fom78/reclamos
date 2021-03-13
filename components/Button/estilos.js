@@ -1,21 +1,20 @@
-import styled from "styled-components";
-import { modoButton } from "./index";
-
+import styled from 'styled-components'
+import { modoButton } from './index'
 
 const handleModoType = modo => {
   switch (modo) {
     case modoButton.FIRMAR:
-      return "#B4E97A";
+      return '#B4E97A'
     case modoButton.ENVIAR_FIRMA:
-      return "#03a9f3";
+      return '#03a9f3'
     case modoButton.CANCELAR_FIRMAR:
-      return "#DA1A03";
+      return '#DA1A03'
     case modoButton.VER_FIRMA:
-      return "#03a9f3";
+      return '#03a9f3'
     default:
-      return "#000000";
+      return '#000000'
   }
-};
+}
 
 export const StyledButton = styled.button`
   align-items: center;
@@ -42,10 +41,8 @@ export const StyledButton = styled.button`
     outline: none;
   box-shadow: none;
   }
-` 
-  
+`
 
 // button > :global(svg) {
 //   margin-right: 8px;
 // }
-

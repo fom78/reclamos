@@ -1,12 +1,11 @@
-import styled from "styled-components";
-
+import styled from 'styled-components'
 
 export const Navegacion = styled.nav`
   background-color: #373a3c !important;
   color: #f8f9fa !important;
   position: relative;
   padding: 0.5rem 1rem;
-`;
+`
 
 export const ContenedorNavegacion = styled.div`
   display: flex;
@@ -25,7 +24,7 @@ export const ContenedorNavegacion = styled.div`
     max-width: 960px;
     /* flex-wrap: nowrap; */
   }
-`;
+`
 
 export const NavbarBrand = styled.a`
   
@@ -50,7 +49,7 @@ export const NavbarBrand = styled.a`
     font-size: 0.771875rem;
     flex-direction: row;
   }
-`;
+`
 
 export const MenuIzquierda = styled.ul`
   margin-left: auto !important;
@@ -69,7 +68,7 @@ export const MenuIzquierda = styled.ul`
   @media screen and (min-width: 992px) {
     flex-direction: row;
   }
-`;
+`
 
 export const NavItem = styled.li`
   display: list-item;
@@ -85,7 +84,7 @@ export const NavItem = styled.li`
 
     ${props => props.activo ? 'color: #fff' : 'color: rgba(255, 255, 255, 0.5)'}
   }
-`;
+`
 
 export const BtnSalir = styled.button`
   border-style:none;

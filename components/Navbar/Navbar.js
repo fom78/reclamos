@@ -1,47 +1,51 @@
-import Link from "next/link";
-import { useEffect } from "react";
-import { Navegacion, ContenedorNavegacion, NavbarBrand, MenuIzquierda, NavItem, BtnSalir } from "./estilos";
-import useUser, { USER_STATES } from "../../hooks/useUser"
-import { logout } from "../../firebase/client";
+import Link from 'next/link'
+import { useEffect } from 'react'
+import { Navegacion, ContenedorNavegacion, NavbarBrand, MenuIzquierda, NavItem, BtnSalir } from './estilos'
+import useUser, { USER_STATES } from '../../hooks/useUser'
+import { logout } from '../../firebase/client'
+
+// useEffect(() => {
+
+//   getFirmas().then(setFirmas)
+// }, [user])
 
 const Navbar = () => {
-  const {user} = useUser()
-
+  const { user } = useUser()
+  // console.log('user::', user)
   const handleClickSalir = () => {
     logout()
-    
   }
 
   return (
     <>
       <Navegacion>
         <ContenedorNavegacion>
-          <Link href="/">
+          <Link href='/'>
             <NavbarBrand activo>Reclamos los Pioneros</NavbarBrand>
           </Link>
 
           <MenuIzquierda>
             <NavItem>
-              <Link href="/firmas">
-                <a aria-current="page">
+              <Link href='/firmas'>
+                <a aria-current='page'>
                   Firmas
                 </a>
               </Link>
             </NavItem>
             <NavItem>
-              <Link href="/github">
+              <Link href='/github'>
                 <a>Fotos</a>
               </Link>
             </NavItem>
             {(user)
-            ? <BtnSalir onClick={handleClickSalir}> Salir</BtnSalir>
-            : null}
+              ? <BtnSalir onClick={handleClickSalir}> Salir</BtnSalir>
+              : null}
           </MenuIzquierda>
         </ContenedorNavegacion>
         {/* </div> */}
       </Navegacion>
     </>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

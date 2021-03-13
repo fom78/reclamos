@@ -1,9 +1,10 @@
-import { Contenedor, ContenedorFirmas, Texto, SimpleCheck, DobleCheck } from './estilos'
+import { Contenedor, ContenedorFirmas, Texto, SimpleCheck, DobleCheck, Firma, FirmaHeader, FirmaContent } from './estilos'
+import Avatar from '../Avatar'
 
 const Firmas = ({ barrio = true, firmas = [] }) => {
   const leyendaBarrio = `${firmas.filter((e) => { return e.esHabitanteDelBarrio }).length} Vecinos de Los Pioneros firmaron.`
   const leyendaNoBarrio = `${firmas.filter((e) => { return !e.esHabitanteDelBarrio }).length} Ciudadanos que conocen el Barrio.`
-  console.log('firmas******', firmas)
+  // console.log('firmas******', firmas)
   return (
     <>
       <Contenedor>
@@ -22,15 +23,18 @@ const Firmas = ({ barrio = true, firmas = [] }) => {
 
       </Contenedor>
       <ContenedorFirmas>
-        <div>
-          {firmas.map(({ id, createdAt, esHabitanteDelBarrio, msg, userId }) =>
-            (<span key={id}> -***  {createdAt} ***de: {userId}</span>)
+        {firmas.map(({ id, createdAt, esHabitanteDelBarrio, msg, userId, userName, userAvatar }) =>
+          (
+            <Firma key={id}>
+              <FirmaHeader><Avatar userName={userName} src={userAvatar} /><span>{createdAt}</span></FirmaHeader>
+              <FirmaContent>{msg}</FirmaContent>
+            </Firma>)
 
-          )}
-          {/* {firmas.map(({ id, userId }) => {
+        )}
+        {/* {firmas.map(({ id, userId }) => {
             return <span key={id}>hola {userId}</span>
           })} */}
-        </div>
+
       </ContenedorFirmas>
     </>
   )
