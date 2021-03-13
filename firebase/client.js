@@ -111,6 +111,8 @@ export const addFirma = async ({ userId, msg, esHabitanteDelBarrio, userName, us
 export const getFirmas = () => {
   return db
     .collection('firmas')
+    .orderBy('createdAt', 'desc')
+    .limit(10)
     .get()
     .then(({ docs }) => {
       return docs.map((doc) => {
