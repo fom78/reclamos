@@ -1,8 +1,12 @@
 
 import { useState, useEffect } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+// Componentes
 import Layout from '../components/Layout'
 import Firmas from '../components/Firmas'
 import Button, { modoButton } from '../components/Button'
+import Option from '../components/Option'
 import styled from 'styled-components'
 
 import { loginWithGmail, addFirma, getFirmas } from '../firebase/client'
@@ -10,29 +14,37 @@ import { loginWithGmail, addFirma, getFirmas } from '../firebase/client'
 import useUser from '../hooks/useUser'
 
 const defaultMessage = 'Firmo en total acuerdo con el reclamo!'
+const opcionNotificacion = {
+  position: 'top-center',
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined
+}
 
 export default function Home () {
   const [verFirma, setVerFirma] = useState(false)
   const [message, setMessage] = useState(defaultMessage)
   const [firmas, setFirmas] = useState([])
+  const [condicion, setCondicion] = useState(null)
 
+  const CONDICIONES = [
+    null,
+    'Vive en Los Pioneros',
+    'Vecino de Campana y conoce el barrio',
+    'De otra ciudad y ha visitado el barrio'
+  ]
   const { user, setUser, userHaFirmado, userFirma, firmando, setFirmando } = useUser()
 
   useEffect(() => {
-    // getFirmas()
-    //   .then((res) => {
-    //     const docs = []
-    //     res.forEach(doc => {
-    //       docs.push({ ...doc.data(), id: doc.id })
-    //     })
-    //     setFirmas(docs)
-    //   })
-    // getFirmas().then((docs) => { setFirmas(docs) })
     getFirmas().then(setFirmas)
   }, [user])
 
   const handleClickFirmar = () => {
     setFirmando(!firmando)
+    setCondicion(null) // eliminar en produccion.
   }
   const handleClickVerMiFirma = () => {
     setVerFirma(!verFirma)
@@ -41,31 +53,43 @@ export default function Home () {
   const handleClickEnviarFirma = (e) => {
     e.preventDefault()
 
-    // Controlamos si el usuario hafirmado ??
-    const esHabitanteDelBarrio = true
-    // const provisorioUid = new Date().getTime()
-    if (!userHaFirmado) {
-      const currentFirma = {
-        userId: user.uid,
-        // userId: provisorioUid,
-        userName: user.name,
-        userAvatar: user.avatar,
-        esHabitanteDelBarrio,
-        msg: message
-      }
+    if (condicion) {
+      // Controlamos si el usuario hafirmado ??
 
-      addFirma(currentFirma)
-        .then((res) => {
-          const newUser = { ...user, firma: currentFirma }
-          setUser(newUser)
-          setFirmando(!firmando)
-          setFirmas([...firmas, currentFirma])
-        })
-    } else { console.log('ya firmaste papa!!!!') }
+      const esHabitanteDelBarrio = condicion === 1
+      // const provisorioUid = new Date().getTime()
+      if (!userHaFirmado) {
+        const currentFirma = {
+          userId: user.uid,
+          // userId: provisorioUid,
+          userName: user.name,
+          userAvatar: user.avatar,
+          esHabitanteDelBarrio,
+          msg: message
+        }
+
+        addFirma(currentFirma)
+          .then((res) => {
+            const newUser = { ...user, firma: currentFirma }
+            setUser(newUser)
+            setFirmando(!firmando)
+            setFirmas([...firmas, currentFirma])
+            toast.success('Su firma se agrego correctamente', opcionNotificacion)
+          })
+      } else {
+        toast.error('Ya firmaste, solo una firma por persona.', opcionNotificacion)
+      }
+    } else {
+      toast.error('Para poder firmar debe elegir una condicion.', opcionNotificacion)
+    }
   }
 
   const handleClickGmail = () => {
     loginWithGmail()
+      .then(() => {
+        setMessage(defaultMessage)
+        setCondicion(null)
+      })
       .catch((err) => {
         console.log(err)
       })
@@ -76,8 +100,24 @@ export default function Home () {
     setMessage(value)
   }
 
+  const handleChangeCondicion = (event) => {
+    const { value } = event.target
+    setCondicion(parseInt(value))
+  }
+
   return (
     <>
+      <ToastContainer
+        position='top-center'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Layout footer dark>
         <CardFirma>
 
@@ -115,6 +155,30 @@ export default function Home () {
                   onChange={handleChange}
                   value={message}
                 />
+                <TituloOpciones>Su condicion es ? ( Elija una para poder enviar )</TituloOpciones>
+                <Opciones>
+                  <Option
+                    value={1}
+                    name='cond'
+                    checked={condicion === 1}
+                    onChange={handleChangeCondicion}
+                    texto={CONDICIONES[1]}
+                  />
+                  <Option
+                    value={2}
+                    name='cond'
+                    checked={condicion === 2}
+                    onChange={handleChangeCondicion}
+                    texto={CONDICIONES[2]}
+                  />
+                  <Option
+                    value={3}
+                    name='cond'
+                    checked={condicion === 3}
+                    onChange={handleChangeCondicion}
+                    texto={CONDICIONES[3]}
+                  />
+                </Opciones>
                 <Button onClick={handleClickEnviarFirma} modo={modoButton.ENVIAR_FIRMA}>Enviar mi firma</Button>
               </FormularioFirma>
             </ContenedorFormulario>
@@ -234,6 +298,32 @@ const TextArea = styled.textarea`
     outline: 0;
     resize: none;
     width: 100%;
+`
+const TituloOpciones = styled.span`
+  padding: .3rem;
+  font-weight:700;
+`
+
+const Opciones = styled.div`
+  display: flex;
+  align-items:center;
+  flex-direction: row;
+  justify-content:space-between;
+  padding: .3rem;
+  
+  @media screen and (max-width: 576px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    //background-color:blue;
+  }
+  @media screen and (min-width: 992px) {
+    flex-direction: row;
+    /* flex-wrap: nowrap; */
+  }
+
 `
 
 // Ver Firma

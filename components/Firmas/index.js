@@ -4,7 +4,6 @@ import Avatar from '../Avatar'
 const Firmas = ({ barrio = true, firmas = [] }) => {
   const leyendaBarrio = `${firmas.filter((e) => { return e.esHabitanteDelBarrio }).length} Vecinos de Los Pioneros firmaron.`
   const leyendaNoBarrio = `${firmas.filter((e) => { return !e.esHabitanteDelBarrio }).length} Ciudadanos que conocen el Barrio.`
-  // console.log('firmas******', firmas)
   return (
     <>
       <Contenedor>

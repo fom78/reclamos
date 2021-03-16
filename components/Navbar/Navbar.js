@@ -11,7 +11,6 @@ import { logout } from '../../firebase/client'
 
 const Navbar = () => {
   const { user } = useUser()
-  // console.log('user::', user)
   const handleClickSalir = () => {
     logout()
   }
