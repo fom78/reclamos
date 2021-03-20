@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useEffect } from 'react'
-import { Navegacion, ContenedorNavegacion, NavbarBrand, MenuIzquierda, NavItem, BtnSalir } from './estilos'
+import Avatar from '../Avatar'
+import { Navegacion, ContenedorNavegacion, NavbarBrand, MenuIzquierda, NavItem, Cuenta, BtnSalir, Bars } from './estilos'
 import useUser, { USER_STATES } from '../../hooks/useUser'
 import { logout } from '../../firebase/client'
 
@@ -23,8 +24,8 @@ const Navbar = () => {
             <NavbarBrand activo>Reclamos los Pioneros</NavbarBrand>
           </Link>
 
-          <MenuIzquierda>
-            <NavItem>
+          
+            {/* <NavItem>
               <Link href='/firmas'>
                 <a aria-current='page'>
                   Firmas
@@ -35,11 +36,18 @@ const Navbar = () => {
               <Link href='/github'>
                 <a>Fotos</a>
               </Link>
-            </NavItem>
+            </NavItem> */}
             {(user)
-              ? <BtnSalir onClick={handleClickSalir}> Salir</BtnSalir>
+              ? (<Cuenta>
+              <Avatar userName={user.userName} src={user.avatar} />
+              <MenuIzquierda>
+              <BtnSalir onClick={handleClickSalir}> Salir</BtnSalir>
+              </MenuIzquierda>
+              
+              </Cuenta>)
               : null}
-          </MenuIzquierda>
+          
+          <Bars />
         </ContenedorNavegacion>
         {/* </div> */}
       </Navegacion>

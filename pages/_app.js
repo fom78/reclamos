@@ -1,5 +1,4 @@
 import Head from 'next/head'
-//import 'bootswatch/dist/cosmo/bootstrap.min.css'
 //import 'animate.css/animate.min.css'
 //import '../styles/globals.css'
 import '../styles/estilos.css'

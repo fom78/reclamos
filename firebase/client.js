@@ -8,7 +8,7 @@ const firebaseConfig = {
   messagingSenderId: '977920751989',
   appId: '1:977920751989:web:68fb490037e0f01e217b3c'
 }
-// console.log(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
+ console.log(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
 // const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
 
 !firebase.apps.length && firebase.initializeApp(firebaseConfig)
