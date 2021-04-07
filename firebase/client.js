@@ -1,15 +1,15 @@
 import firebase from 'firebase'
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyCMZaxpuyP7bAQ-0T7h8yDN06dKzShixeQ',
-  authDomain: 'reclamos-8b620.firebaseapp.com',
-  projectId: 'reclamos-8b620',
-  storageBucket: 'reclamos-8b620.appspot.com',
-  messagingSenderId: '977920751989',
-  appId: '1:977920751989:web:68fb490037e0f01e217b3c'
-}
-// console.log(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
-// const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyCMZaxpuyP7bAQ-0T7h8yDN06dKzShixeQ',
+//   authDomain: 'reclamos-8b620.firebaseapp.com',
+//   projectId: 'reclamos-8b620',
+//   storageBucket: 'reclamos-8b620.appspot.com',
+//   messagingSenderId: '977920751989',
+//   appId: '1:977920751989:web:68fb490037e0f01e217b3c'
+// }
+console.log(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
+const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
 
 !firebase.apps.length && firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore()
