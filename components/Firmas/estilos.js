@@ -49,6 +49,9 @@ export const FirmaHeader = styled.div`
     padding: .4rem;
     font-weight:700;
     //border:2px solid white;
+    /* > span:hover {
+        display:none;
+    } */
 `
 
 export const FirmaContent = styled.div`

@@ -203,7 +203,8 @@ export default function Home () {
             </Texto>
           </Articulo>
           <Conteo>
-            <Firmas firmas={firmas} />
+            <Firmas firmas={firmas}>firmas</Firmas>
+
             {/* <Firmas firmas={firmas} barrio={false} /> */}
           </Conteo>
         </CardReclamo>

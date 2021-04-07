@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { FaBars } from 'react-icons/fa';
 
 export const Navegacion = styled.nav`
   background-color: #373a3c !important;
@@ -44,8 +43,6 @@ export const NavbarBrand = styled.a`
     cursor:pointer;
   }
 
-  
-
   @media screen and (max-width: 576px) {
     font-size: 0.771875rem;
     flex-direction: row;
@@ -53,22 +50,10 @@ export const NavbarBrand = styled.a`
 `
 
 export const Cuenta = styled.div`
-  
+  display:flex;
+  flex-direction:row;
+  align-items: center;
 `
-export const Bars = styled(FaBars)`
-  display: none;
-  color: #fff;
-  @media screen and (max-width: 768px) {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: translate(-100%, 75%);
-    font-size: 1.8rem;
-    cursor: pointer;
-  }
-`;
-
 export const MenuIzquierda = styled.ul`
   margin-left: auto !important;
   display: flex;
@@ -109,7 +94,7 @@ export const BtnSalir = styled.button`
   border-radius:2.5rem;
   padding: .5rem .3rem;
   background-color:transparent;
-  font-size: .771875rem;
+  font-size: .9rem;
   font-weight:700;
   cursor:pointer;
   color: #fff;

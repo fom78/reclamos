@@ -16,4 +16,8 @@ export const AvatarStyled = styled.img`
   `
 export const UserName = styled.span`
     margin-left: 5px;
+    font-size:10px;
+    @media screen and (max-width: 768px) {
+        display: none;
+    }
 `
